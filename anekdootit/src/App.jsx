@@ -13,7 +13,8 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
-  
+  const [points, setPoints] = useState(new Array(8).fill(0))
+
   // 8 KPL anekdootteja taulukossa välillä [0] - [7]
   const min = 0
   const max = 7
@@ -28,10 +29,31 @@ const App = () => {
     setSelected(randomNumber(min, max))
   }
 
+  const handleVoteClick = () => {
+    const pointsCopy = [...points]
+    pointsCopy[selected] += 1
+    setPoints(pointsCopy)
+  }
+
+  const getMaxIndex = (points) => {
+    let maxIndex = 0
+    for (let i = 1; i < points.length; i++) {
+      if (points[i] > points[maxIndex]) {
+        maxIndex = i
+      }
+    }
+    return maxIndex
+  }
+
   return (
     <div>
-      <h3>{anecdotes[selected]}</h3>
+      <h1>Anecdote of the day</h1>
+      <p>{anecdotes[selected]}</p>
+      <p>has {points[selected]} votes</p>
+      <Button handleClick={handleVoteClick} text='vote' />
       <Button handleClick={handleClick} text='next anecdote' />
+      <h1>Anecdote with most votes</h1>
+      <p>{anecdotes[getMaxIndex(points)]}</p>
     </div>
   )
 }
